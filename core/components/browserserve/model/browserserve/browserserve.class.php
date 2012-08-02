@@ -23,6 +23,7 @@
  * @package  browserserve
  * @authors  Dan Gibbs <dan@goldcoastmedia.co.uk>
  */
+
 class browserServe {
 
 	protected $_modx;
@@ -42,8 +43,9 @@ class browserServe {
 	public function __construct(modX &$modx, array &$config)
 	{
 		$this->modx =& $modx;
+		$this->modx->setLogLevel(modX::LOG_LEVEL_DEBUG);
 
-		// Case insensitivity on snippet parameters
+		// Force all parameters to lowercase
 		$config = array_change_key_case($config, CASE_LOWER);
 
 		// Merge snippet parameters with default config
@@ -59,14 +61,7 @@ class browserServe {
 	 * @return  string  output specified by snippet call
 	 */
 	public function run()
-	{
-
-
-		// Return the user agent in a chunk
-		if($this->config['returnagent']) {
-			return $this->_user_agent;
-		}
-	}
+	{}
 	
 	/**
 	 * Return raw user agent.
@@ -77,20 +72,6 @@ class browserServe {
 	{}
 
 	/**
-	 * Return array from comma seperated arguments
-	 *
-	 * @param   string     $cs_str  comma seperated string
-	 * @return  array      
-	 */	
-	protected function prepare_array($cs_str)
-	{
-		$arr = array_map('trim', explode(',', $cs_str));
-		
-		if(is_array($arr))
-			return $arr;
-	}
-
-	/**
 	 * Return whether the clients user agent matches
 	 *
 	 * @return  boolean    whether a match has been made
@@ -99,13 +80,15 @@ class browserServe {
 	{}
 
 	/**
-	 * Inserts CSS into the socument head
+	 * Insert CSS into the a documents head
 	 *
-	 * @param   array      $arr  css files
+	 * @param   array  $arr  css files
+	 * @return  void
 	 */
-	protected function insert_css(array $stylesheets)
+	protected function insert_css($stylesheets = array())
 	{
-		foreach ($stylesheets as $css) {
+		foreach ($stylesheets as $css)
+		{
 			$this->modx->regClientCSS($css);
 		}
 	}
@@ -113,11 +96,12 @@ class browserServe {
 	/**
 	 * Insert JavaScript into the MODx document template head
 	 *
-	 * @param   array      $arr  javascript files
+	 * @param  array  $arr  javascript files
 	 */
-	protected function insert_js(array $scripts)
+	protected function insert_js($scripts = array())
 	{
-		foreach ($scripts as $javascript) {
+		foreach ($scripts as $javascript)
+		{
 			$this->modx->regClientStartupScript($javascript);
 		}
 	}
@@ -125,11 +109,12 @@ class browserServe {
 	/**
 	 * Insert JavaScript into document body
 	 *
-	 * @param   array       $arr  javascript files
+	 * @param  array  $arr  javascript files
 	 */
-	protected function insert_body_js(array $scripts)
+	protected function insert_body_js($scripts = array())
 	{
-		foreach ($scripts as $javascript) {
+		foreach ($scripts as $javascript
+		{
 			$this->modx->regClientScript($javascript);
 		}
 	}
@@ -137,11 +122,12 @@ class browserServe {
 	/**
 	 * Run snippets
 	 *
-	 * @param   array      $arr  snippets to run
+	 * @param  array  $arr  snippets to run
 	 */
-	protected function run_snippet(array $snippets)
+	protected function run_snippet($snippets = array())
 	{
-		foreach ($snippets as $snippet) {
+		foreach ($snippets as $snippet)
+		{
 			$this->modx->runSnippet($snippet, array());
 		}
 	}
@@ -149,15 +135,28 @@ class browserServe {
 	/**
 	 * Get a MODx chunk
 	 *
-	 * @param   string     $name	        chunk name
-	 * @param   array      $properties	chunk properties
-	 * @return  object     returns modChunk
+	 * @param   string  $name	        chunk name
+	 * @param   array   $properties	chunk properties
+	 * @return  object  returns modChunk
 	 */
-	protected function get_chunk($name, array $properties)
+	protected function get_chunk($name, $properties = array())
 	{
 		$chunk = $this->modx->getChunk($name, $properties);
-		
 		return $chunk;
+	}
+
+	/**
+	 * Return array from comma separated arguments
+	 *
+	 * @param   string       $string  comma separated string
+	 * @return  array|false
+	 */	
+	protected function prepare_array($string)
+	{
+		$csv = array_map('trim', explode(',', $string));
+		$csv = ( is_array($csv) ) ? $csv : FALSE;
+
+		return $csv;
 	}
 }
 

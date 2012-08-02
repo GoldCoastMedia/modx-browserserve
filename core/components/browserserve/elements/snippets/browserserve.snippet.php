@@ -24,7 +24,7 @@
  * @package  browserserve
  */
 
-require_once $modx->getOption("core_path") . "components/browserserve/model/browserserve/browserserve.class.php";
+require_once $modx->getOption("core_path") . 'components/browserserve/model/browserserve/browserserve.class.php';
 $browserserve = new browserServe($modx, $scriptProperties);
 $result = $browserserve->run();
 unset($browserserve);
