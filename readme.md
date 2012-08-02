@@ -18,19 +18,20 @@ Examples
 **Insert a stylesheet for IE7**
 
 ```
-[[!BrowserServe? &userAgent=`MSIE 7` &insertCSS=`ie7.css`]]```
-
+[[!BrowserServe? &userAgent=`MSIE 7` &insertCSS=`ie7.css`]]
+```
 
 **Display a message (chunk) for IE6 users**
 
 ```
-[[!BrowserServe? &userAgent=`MSIE 6` &tpl=`noie6-chunk`]]```
-
+[[!BrowserServe? &userAgent=`MSIE 6` &tpl=`noie6-chunk`]]
+```
 
 **Insert JavaScript file for all non-Opera browsers**
 
 ```
-[[!BrowserServe? &userAgent=`Opera` &matchType=`0` &insertJS=`non-opera-script.js`]]```
+[[!BrowserServe? &userAgent=`Opera` &matchType=`0` &insertJS=`non-opera-script.js`]]
+```
 
 Documentation
 ------------
