@@ -61,7 +61,9 @@ class browserServe {
 	 * @return  string  output specified by snippet call
 	 */
 	public function run()
-	{}
+	{
+		
+	}
 	
 	/**
 	 * Return raw user agent.
@@ -69,15 +71,41 @@ class browserServe {
 	 * @return  string     returns raw user agent in a chunk
 	 */
 	protected function return_agent()
-	{}
+	{
+		if($chunk = $this->config['tpl'])
+		{
+			$properties = array(
+				'useragent' => $this->_user_agent;
+			);
+			
+			return $this->get_chunk($chunk, $properties);
+		}
+		else
+			return $this->_user_agent;
+	}
 
 	/**
-	 * Return whether the clients user agent matches
+	 * Return whether the clients user agent matches (or doesn't)
 	 *
 	 * @return  boolean    whether a match has been made
 	 */	
-	protected function match_user_agent()
-	{}
+	protected function match_user_agent($to_match = array())
+	{
+		$match = FALSE;
+		
+		foreach($to_match as $user_agent) {
+			if(stristr($this->_user_agent, $user_agent)){
+				$match = TRUE;
+			}
+		}
+		
+		if( !$match AND $this->matchtype === 0)
+			$match = TRUE;
+		if($match AND $this->matchtype === 0)
+			$match = FALSE;
+			
+		return $match;
+	}
 
 	/**
 	 * Insert CSS into the a documents head
@@ -87,6 +115,12 @@ class browserServe {
 	 */
 	protected function insert_css($stylesheets = array())
 	{
+		if( !is_array($stylesheets))
+		{
+			// FIXME: A better way to do this
+			$stylesheet = str_split($stylesheet, strlen($stylesheet));
+		}
+
 		foreach ($stylesheets as $css)
 		{
 			$this->modx->regClientCSS($css);
@@ -100,12 +134,18 @@ class browserServe {
 	 */
 	protected function insert_js($scripts = array())
 	{
-		foreach ($scripts as $javascript)
+		if( !is_array($scripts))
 		{
-			$this->modx->regClientStartupScript($javascript);
+			// FIXME: A better way to do this
+			$script = str_split($script, strlen($script));
+		}
+
+		foreach ($scripts as $script)
+		{
+			$this->modx->regClientStartupScript($css);
 		}
 	}
-
+	
 	/**
 	 * Insert JavaScript into document body
 	 *
@@ -113,9 +153,15 @@ class browserServe {
 	 */
 	protected function insert_body_js($scripts = array())
 	{
-		foreach ($scripts as $javascript
+		if( !is_array($scripts))
 		{
-			$this->modx->regClientScript($javascript);
+			// FIXME: A better way to do this
+			$script = str_split($script, strlen($script));
+		}
+
+		foreach ($scripts as $script)
+		{
+			$this->modx->regClientScript($css);
 		}
 	}
 
@@ -135,9 +181,9 @@ class browserServe {
 	/**
 	 * Get a MODx chunk
 	 *
-	 * @param   string  $name	        chunk name
-	 * @param   array   $properties	chunk properties
-	 * @return  object  returns modChunk
+	 * @param   string  $name	 chunk name
+	 * @param   array   $properties	 chunk properties
+	 * @return  object  returns	 modChunk
 	 */
 	protected function get_chunk($name, $properties = array())
 	{
@@ -149,7 +195,7 @@ class browserServe {
 	 * Return array from comma separated arguments
 	 *
 	 * @param   string       $string  comma separated string
-	 * @return  array|false
+	 * @return  array|FALSE
 	 */	
 	protected function prepare_array($string)
 	{

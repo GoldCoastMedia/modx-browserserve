@@ -1,6 +1,6 @@
 BrowserServe
 ============
-Version: 1.0.0-beta (2012-06-22)
+Version: 1.0.0-beta (2012-11-15)
 Authors: Dan Gibbs <dan@goldcoastmedia.co.uk>
 
 BrowserServe is a MODx snippet that allows you to add CSS, JavaScript or run a
@@ -12,7 +12,7 @@ Git repo: https://github.com/GoldCoastMedia/modx-browserserve
 Documentation
 -------------
 Full detailed documentation available at:
-http://www.goldcoastmedia.co.uk/tools/browser-serve/
+http://www.goldcoastmedia.co.uk/tools/modx/browser-serve/
 
 Gold Coast Media
 
