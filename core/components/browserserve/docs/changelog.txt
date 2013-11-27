@@ -1,8 +1,10 @@
 Changelog for BrowserServe.
 
-1.0.0 (date)
+0.9-beta (2013-11-19)
 ===============================================================================
-- 
+- Improved class
+- More logical (case insensitive) parameters
+- Improved documentation and examples
 
 0.1-beta (2011-06-01)
 ===============================================================================

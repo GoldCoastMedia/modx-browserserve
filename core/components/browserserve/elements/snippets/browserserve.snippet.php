@@ -2,7 +2,7 @@
 /**
  * BrowserServe - Serve resources to individual browsers
  *
- * Copyright (c) 2011-2012 Gold Coast Media
+ * Copyright (c) 2011-2013 Gold Coast Media
  *
  * This file is part of BrowserServe.
  *
@@ -24,9 +24,9 @@
  * @package  browserserve
  */
 
-require_once $modx->getOption("core_path") . 'components/browserserve/model/browserserve/browserserve.class.php';
+require_once $modx->getOption('core_path') . 'components/browserserve/model/browserserve/browserserve.class.php';
 $browserserve = new browserServe($modx, $scriptProperties);
+
 $result = $browserserve->run();
 unset($browserserve);
-
 return $result;

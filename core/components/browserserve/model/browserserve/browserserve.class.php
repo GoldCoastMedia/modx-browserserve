@@ -2,7 +2,7 @@
 /*
  * BrowserServe - Serve resources for individual browsers
  *
- * Copyright (c) 2011-2012 Gold Coast Media
+ * Copyright (c) 2011-2013 Gold Coast Media
  *
  * This file is part of BrowserServe.
  *
@@ -26,18 +26,18 @@
 
 class browserServe {
 
-	protected $_modx;
-	protected $_user_agent;
+	private $modx;
+	private $user_agent;
 
 	public $config = array(
-		'insertbodyjs' => array(),
-		'insertcss'    => array(),
-		'insertjs'     => array(),
-		'matchtype'    => 1,
-		'returnagent'  => 0,
-		'runsnippet'   => array(),
-		'tpl'          => 'useragent',
-		'useragent'    => NULL,
+		'css'       => array(),
+		'js'        => array(),
+		'jsbody'    => array(),
+		'match'     => TRUE,
+		'return'    => FALSE,
+		'snippet'   => array(),
+		'tpl'       => 'browserserve_useragent',
+		'useragent' => NULL,
 	);
 
 	public function __construct(modX &$modx, array &$config)
@@ -47,82 +47,79 @@ class browserServe {
 
 		// Force all parameters to lowercase
 		$config = array_change_key_case($config, CASE_LOWER);
-
-		// Merge snippet parameters with default config
 		$this->config = array_merge($this->config, $config);
 
 		// Set the user agent
-		$this->_user_agent = $_SERVER['HTTP_USER_AGENT'];
+		$this->user_agent = $_SERVER['HTTP_USER_AGENT'];
 	}
-	
-	/**
-	 * Main snippet call
-	 *
-	 * @return  string  output specified by snippet call
-	 */
+
+
 	public function run()
 	{
-		
+		// Return the user agent string
+		if($this->config['return'])
+			return $this->return_agent($this->user_agent, $this->config['tpl']);
+
+		// Match 
 	}
 	
 	/**
 	 * Return raw user agent.
 	 *
-	 * @return  string     returns raw user agent in a chunk
+	 * @param   string  $useragent  The useragent
+	 * @param   string  $chunk      The chunk name
+	 *
+	 * @return  string  returns raw user agent in a chunk
 	 */
-	protected function return_agent()
+	private function return_agent($useragent, $chunk = NULL)
 	{
-		if($chunk = $this->config['tpl'])
-		{
-			$properties = array(
-				'useragent' => $this->_user_agent;
-			);
+		if($chunk) {
+			$properties = array('useragent' => $useragent);
 			
 			return $this->get_chunk($chunk, $properties);
 		}
 		else
-			return $this->_user_agent;
+			return $useragent;
 	}
 
 	/**
 	 * Return whether the clients user agent matches (or doesn't)
 	 *
-	 * @return  boolean    whether a match has been made
+	 * @param  array   $match       array of matches to make
+	 * @param  string  $type        match type
+	 * @param  string  $useragent   the useragent
+	 *
+	 * @return  bool   $found       whether a match has been made
 	 */	
-	protected function match_user_agent($to_match = array())
+	private function match_user_agent($match = array(), $type, $useragent)
 	{
-		$match = FALSE;
+		$found = FALSE;
 		
-		foreach($to_match as $user_agent) {
-			if(stristr($this->_user_agent, $user_agent)){
+		foreach($match as $search) {
+			if( stristr($useragent, $search) )
 				$match = TRUE;
-			}
 		}
 		
-		if( !$match AND $this->matchtype === 0)
-			$match = TRUE;
-		if($match AND $this->matchtype === 0)
-			$match = FALSE;
+		// Reverse matches if match type is set to 0
+		$found = (!$found AND $type == 0) ? TRUE : FALSE;
+		$found = ($found AND $type == 0) ? FALSE : TRUE;
 			
-		return $match;
+		return $found;
 	}
 
 	/**
 	 * Insert CSS into the a documents head
 	 *
-	 * @param   array  $arr  css files
-	 * @return  void
+	 * @param   array  $stylesheets  css files
 	 */
-	protected function insert_css($stylesheets = array())
+	private function insert_css($stylesheets = array())
 	{
-		if( !is_array($stylesheets))
-		{
+		if( !is_array($stylesheets)) {
 			// FIXME: A better way to do this
 			$stylesheet = str_split($stylesheet, strlen($stylesheet));
 		}
 
-		foreach ($stylesheets as $css)
-		{
+		foreach ($stylesheets as $css) {
 			$this->modx->regClientCSS($css);
 		}
 	}
@@ -130,18 +127,16 @@ class browserServe {
 	/**
 	 * Insert JavaScript into the MODx document template head
 	 *
-	 * @param  array  $arr  javascript files
+	 * @param  array  $scripts  javascript files
 	 */
-	protected function insert_js($scripts = array())
+	private function insert_js($scripts = array())
 	{
-		if( !is_array($scripts))
-		{
+		if( !is_array($scripts)) {
 			// FIXME: A better way to do this
 			$script = str_split($script, strlen($script));
 		}
 
-		foreach ($scripts as $script)
-		{
+		foreach ($scripts as $script) {
 			$this->modx->regClientStartupScript($css);
 		}
 	}
@@ -149,18 +144,16 @@ class browserServe {
 	/**
 	 * Insert JavaScript into document body
 	 *
-	 * @param  array  $arr  javascript files
+	 * @param  array  $scripts  javascript files
 	 */
-	protected function insert_body_js($scripts = array())
+	private function insert_body_js($scripts = array())
 	{
-		if( !is_array($scripts))
-		{
+		if( !is_array($scripts)) {
 			// FIXME: A better way to do this
 			$script = str_split($script, strlen($script));
 		}
 
-		foreach ($scripts as $script)
-		{
+		foreach ($scripts as $script) {
 			$this->modx->regClientScript($css);
 		}
 	}
@@ -168,12 +161,11 @@ class browserServe {
 	/**
 	 * Run snippets
 	 *
-	 * @param  array  $arr  snippets to run
+	 * @param   array  $snippets  snippets to run
 	 */
-	protected function run_snippet($snippets = array())
+	private function run_snippet($snippets = array())
 	{
-		foreach ($snippets as $snippet)
-		{
+		foreach ($snippets as $snippet) {
 			$this->modx->runSnippet($snippet, array());
 		}
 	}
@@ -181,11 +173,12 @@ class browserServe {
 	/**
 	 * Get a MODx chunk
 	 *
-	 * @param   string  $name	 chunk name
+	 * @param   string  $name	     chunk name
 	 * @param   array   $properties	 chunk properties
-	 * @return  object  returns	 modChunk
+	 *
+	 * @return  object  returns	     modChunk
 	 */
-	protected function get_chunk($name, $properties = array())
+	private function get_chunk($name, $properties = array())
 	{
 		$chunk = $this->modx->getChunk($name, $properties);
 		return $chunk;
@@ -195,9 +188,10 @@ class browserServe {
 	 * Return array from comma separated arguments
 	 *
 	 * @param   string       $string  comma separated string
+	 *
 	 * @return  array|FALSE
 	 */	
-	protected function prepare_array($string)
+	private function prepare_array($string)
 	{
 		$csv = array_map('trim', explode(',', $string));
 		$csv = ( is_array($csv) ) ? $csv : FALSE;
@@ -205,4 +199,3 @@ class browserServe {
 		return $csv;
 	}
 }
-

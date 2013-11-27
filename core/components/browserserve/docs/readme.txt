@@ -1,13 +1,15 @@
 BrowserServe
 ============
-Version: 1.0.0-beta (2012-11-15)
+Version: 1.0.0-beta (2013-11-19)
 Authors: Dan Gibbs <dan@goldcoastmedia.co.uk>
 
-BrowserServe is a MODx snippet that allows you to add CSS, JavaScript or run a
-snippet for different browsers. It loosely matches User Agent strings  allowing
-it to be flexible and match any web browsers user agent header.
+BrowserServe is a MODX extension that allows you to add CSS or JavaScript
+to MODX documents depending on the users web browser. You provide a string
+to match and it will compare it to the visitors user agent making it very
+flexible.
 
-Git repo: https://github.com/GoldCoastMedia/modx-browserserve
+Git repository: https://github.com/GoldCoastMedia/modx-browserserve
+
 
 Documentation
 -------------

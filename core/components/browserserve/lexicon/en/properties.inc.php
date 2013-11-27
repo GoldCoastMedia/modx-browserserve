@@ -26,26 +26,26 @@
  * @language    en
  */
 
-$_lang['insertbodyjs'] = "A comma-separated list of JavaScript files to insert 
+$_lang['jsbody'] = "A comma-separated list of JavaScript files to insert 
 into the document body if a user agent match is found. Must contain absolute 
 paths or be relative to the document path.";
 
-$_lang['insertcss'] = "A comma-separated list of CSS files to insert into the 
+$_lang['css'] = "A comma-separated list of CSS files to insert into the 
 document head if a user agent match is found. Must contain absolute paths or be 
 relative to the document path.";
 
-$_lang['insertjs'] = "A comma-separated list of JavaScript files to insert into 
+$_lang['js'] = "A comma-separated list of JavaScript files to insert into 
 the document head if a user agent match is found. Must contain absolute paths 
 or be relative to the document path.";
 
-$_lang['matchtype'] = "If true, will include resources if a match is made. If 
+$_lang['match'] = "If true, will include resources if a match is made. If 
 set to false it will only include the resources when a match isn't made. 
 Default value: 1";
 
-$_lang['returnagent'] = "If true, will return the user agent string. Default 
+$_lang['return'] = "If true, will return the user agent string. Default 
 value: 0";
 
-$_lang['runsnippet'] = "A comma-separated list of snippets to execute if a user 
+$_lang['snippet'] = "A comma-separated list of snippets to execute if a user 
 agent match is found.";
 
 $_lang['tpl'] = "A chunk name to use and display if the correct matches are 

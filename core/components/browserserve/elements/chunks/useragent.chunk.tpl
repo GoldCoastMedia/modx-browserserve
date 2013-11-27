@@ -1,1 +1,1 @@
-<p>[[+useragent]]</p>
+[[+useragent]]
